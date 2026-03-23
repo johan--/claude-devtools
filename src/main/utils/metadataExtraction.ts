@@ -9,6 +9,8 @@ import * as readline from 'readline';
 import { LocalFileSystemProvider } from '../services/infrastructure/LocalFileSystemProvider';
 import { type ChatHistoryEntry, isTextContent, type UserEntry } from '../types';
 
+import { translateWslMountPath } from './pathDecoder';
+
 import type { FileSystemProvider } from '../services/infrastructure/FileSystemProvider';
 
 const logger = createLogger('Util:metadataExtraction');
@@ -59,7 +61,7 @@ export async function extractCwd(
       if ('cwd' in entry && entry.cwd) {
         rl.close();
         fileStream.destroy();
-        return normalizeDriveLetter(entry.cwd);
+        return normalizeDriveLetter(translateWslMountPath(entry.cwd));
       }
     }
   } catch (error) {
